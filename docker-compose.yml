@@ -1,0 +1,44 @@
+version: '3'
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 10.2.1.11
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  spark-master:
+    image: dsncode/spark-master
+    hostname: master
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+    networks:
+      - sparknet
+
+  spark-slave:
+    image: dsncode/spark-slave
+    depends_on:
+      - spark-master
+    ports:
+      - "8081:8081"
+    environment:
+      - "SPARK_MASTER=spark-master:7077"
+    deploy:
+      replicas: 1 # change to any number of necessary replicas
+    networks:
+      - sparknet
+
+  cassandra:
+    image: spotify/cassandra
+
+networks:
+  sparknet:
