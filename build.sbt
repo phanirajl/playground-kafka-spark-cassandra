@@ -8,20 +8,30 @@ lazy val lateEvents = project
   .settings(commonSettings)
   .settings(protobufSettings)
   .settings(
-    libraryDependencies ++= library.testLibraries
+    libraryDependencies ++= library.testLibs,
+    libraryDependencies ++= library.configLibs
   )
 
 lazy val library = new {
   object Version {
-    val Scala     = "2.11.12"
-    val ScalaTest = "3.0.1"
+    val PureConfig     = "0.11.1"
+    val Scala          = "2.11.12"
+    val ScalaTest      = "3.0.1"
+    val TypesafeConfig = "1.3.5-RC1"
   }
 
   import Version._
-  val scalatest = "org.scalatest" %% "scalatest" % ScalaTest % "test"
+  val pureConfig     = "com.github.pureconfig" %% "pureconfig" % PureConfig
+  val scalaTest      = "org.scalatest"         %% "scalatest"  % ScalaTest % "test"
+  val typesafeConfig = "com.typesafe"          % "config"      % TypesafeConfig
 
-  val testLibraries = Seq(
-    scalatest
+  val testLibs = Seq(
+    scalaTest
+  )
+
+  val configLibs = Seq(
+    pureConfig,
+    typesafeConfig
   )
 }
 
