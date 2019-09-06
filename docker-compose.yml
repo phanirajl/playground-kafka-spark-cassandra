@@ -4,6 +4,7 @@ services:
     image: wurstmeister/zookeeper
     ports:
       - "2181:2181"
+
   kafka:
     image: wurstmeister/kafka
     ports:
@@ -13,6 +14,7 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+
   spark-master:
     image: dsncode/spark-master
     hostname: master
@@ -21,6 +23,7 @@ services:
       - "7077:7077"
     networks:
       - sparknet
+
   spark-slave:
     image: dsncode/spark-slave
     depends_on:
@@ -33,6 +36,9 @@ services:
       replicas: 1 # change to any number of necessary replicas
     networks:
       - sparknet
+
+  cassandra:
+    image: spotify/cassandra
 
 networks:
   sparknet:
