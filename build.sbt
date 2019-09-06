@@ -8,12 +8,14 @@ lazy val lateEvents = project
   .settings(commonSettings)
   .settings(protobufSettings)
   .settings(
-    libraryDependencies ++= library.testLibs,
-    libraryDependencies ++= library.configLibs
+    libraryDependencies ++= library.configLibs,
+    libraryDependencies ++= library.kafkaLibs,
+    libraryDependencies ++= library.testLibs
   )
 
 lazy val library = new {
   object Version {
+    val Kafka          = "2.3.0"
     val PureConfig     = "0.11.1"
     val Scala          = "2.11.12"
     val ScalaTest      = "3.0.1"
@@ -21,18 +23,24 @@ lazy val library = new {
   }
 
   import Version._
+  val kafka          = "org.apache.kafka"      %% "kafka"      % Kafka
   val pureConfig     = "com.github.pureconfig" %% "pureconfig" % PureConfig
   val scalaTest      = "org.scalatest"         %% "scalatest"  % ScalaTest % "test"
   val typesafeConfig = "com.typesafe"          % "config"      % TypesafeConfig
 
-  val testLibs = Seq(
-    scalaTest
+  val kafkaLibs = Seq(
+    kafka
   )
 
   val configLibs = Seq(
     pureConfig,
     typesafeConfig
   )
+
+  val testLibs = Seq(
+    scalaTest
+  )
+
 }
 
 // *****************************************************************************

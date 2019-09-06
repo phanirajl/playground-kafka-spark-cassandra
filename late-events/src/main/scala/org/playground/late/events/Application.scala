@@ -1,15 +1,10 @@
 package org.playground.late.events
 
-import org.playground.late.events.protobuf.TimeEvent.TimeEvent
+import org.playground.late.events.process.{ Configuration, KafkaService }
 
 object Application {
   def main(args: Array[String]): Unit = {
-    val timeEvent = TimeEvent(
-      1L,
-      System.currentTimeMillis(),
-      "Single Time Event",
-      1
-    )
-    println(s"the TimeEvent is '$timeEvent'.")
+    val configuration = Configuration.load()
+    KafkaService.writeToKafka(configuration)
   }
 }
