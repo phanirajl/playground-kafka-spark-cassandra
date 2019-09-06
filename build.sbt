@@ -6,6 +6,7 @@ lazy val lateEvents = project
     name := "late-events"
   )
   .settings(commonSettings)
+  .settings(protobufSettings)
   .settings(
     libraryDependencies ++= library.testLibraries
   )
@@ -24,6 +25,19 @@ lazy val library = new {
   )
 }
 
+// *****************************************************************************
+// Aliases
+// *****************************************************************************
+
+addCommandAlias(
+  "styleCheck",
+  "; scalafmt::test ; test:scalafmt::test ; scalastyle ; test:scalastyle"
+)
+
+// -----------------------------------------------------------------------------
+// common settings
+// -----------------------------------------------------------------------------
+
 lazy val commonSettings = Seq(
   scalaVersion := library.Version.Scala,
   scalacOptions ++= Seq(
@@ -37,3 +51,14 @@ lazy val commonSettings = Seq(
     "-Xfatal-warnings"
   )
 )
+
+// -----------------------------------------------------------------------------
+// protobuf/protoc compiler scala plugin
+// -----------------------------------------------------------------------------
+
+lazy val protobufSettings =
+  Seq(
+    PB.targets in Compile := Seq(
+      scalapb.gen() -> (sourceManaged in Compile).value
+    )
+  )
