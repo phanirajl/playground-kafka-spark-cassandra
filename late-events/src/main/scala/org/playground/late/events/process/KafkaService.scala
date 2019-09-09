@@ -10,8 +10,11 @@ import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.playground.late.events.generator.DataGenerator
 import org.playground.late.events.protobuf.TimeEvent.TimeEvent
+import org.slf4j.LoggerFactory
 
 object KafkaService {
+  private val log = LoggerFactory.getLogger(this.getClass)
+
   private def createProperties(configuration: Configuration) = {
     val properties = new Properties()
     properties.put(
@@ -44,6 +47,7 @@ object KafkaService {
     val generator  = new DataGenerator(configuration)
     val producer   = new KafkaProducer[String, Array[Byte]](properties)
     val record     = generator.generate()
+    log.debug(s"Sending to Kafka: $record")
     producer.send(record)
     producer.close()
   }
@@ -57,8 +61,8 @@ object KafkaService {
       val record = consumer.poll(Duration.ofSeconds(1L)).asScala
       for (data <- record.iterator) {
         TimeEvent.validate(data.value()) match {
-          case Failure(exception) => println(s"Error: $exception")
-          case Success(x) => println(s"key='${data.key()} value='$x")
+          case Failure(exception) => log.error("An error occurred: Exception was: ", exception)
+          case Success(x) => log.debug(s"key='${data.key()} value='$x")
         }
       }
     }
