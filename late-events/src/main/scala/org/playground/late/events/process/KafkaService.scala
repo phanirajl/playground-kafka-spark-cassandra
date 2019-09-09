@@ -57,7 +57,7 @@ object KafkaService {
       val record = consumer.poll(Duration.ofSeconds(1L)).asScala
       for (data <- record.iterator) {
         TimeEvent.validate(data.value()) match {
-          case Failure(exception) => println("Error")
+          case Failure(exception) => println(s"Error: $exception")
           case Success(x) => println(s"key='${data.key()} value='$x")
         }
       }
