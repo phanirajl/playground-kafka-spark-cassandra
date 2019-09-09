@@ -2,9 +2,11 @@ package org.playground.late.events.process
 
 import com.typesafe.config.{ Config, ConfigFactory }
 
-final case class Configuration(kafka: Kafka)
+final case class Configuration(kafka: Kafka, spark: Spark)
 
 final case class Kafka(bootstrapServers: String, timeEventTopic: String)
+
+final case class Spark(compressionCodec: String, applicationName: String)
 
 object Configuration {
   private val Filename = "application.conf"
