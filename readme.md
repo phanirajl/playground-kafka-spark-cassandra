@@ -9,8 +9,9 @@ This is a playground project for the frameworks:
 * docker-compose installed
 
 # Start Up Environment
-1. Modify `docker-compose.yml` variable `KAFKA_ADVERTISED_HOST_NAME` with your docker host ip
-2. `docker-compose up`
+1. `docker-compose up`
+2. start `ApplicationKafkaReader` in IntelliJ
+3. start `ApplicationKafkaWriter` in IntelliJ
 
 # Shut Down
 `docker-compose stop`
