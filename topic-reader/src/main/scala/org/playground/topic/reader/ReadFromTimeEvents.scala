@@ -10,7 +10,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.playground.protobufs.TimeEvent.TimeEvent
 import org.slf4j.LoggerFactory
 
-object ReadTimeEvents {
+object ReadFromTimeEvents {
   private val Log = LoggerFactory.getLogger(this.getClass)
 
   def apply(configuration: Configuration, properties: Properties): Unit = {

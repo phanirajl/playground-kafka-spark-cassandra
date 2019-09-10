@@ -1,9 +1,8 @@
-package org.playground.late.events.generator
+package org.playground.generator
 
 import scala.util.Random
 
 import org.apache.kafka.clients.producer.ProducerRecord
-import org.playground.late.events.process.Configuration
 
 class DataGenerator(configuration: Configuration) {
   private val timeEventGenerator = new TimeEventGenerator(0, 1234567890L)

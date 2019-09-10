@@ -1,4 +1,4 @@
-package org.playground.topic.reader
+package org.playground.generator
 
 import org.slf4j.LoggerFactory
 
@@ -10,6 +10,6 @@ object Application {
     val configuration = Configuration.load()
     val properties    = CreateProperties(configuration)
     Log.info(s"Configuration loaded: ${configuration.prettyPrint()}")
-    ReadFromTimeEvents(configuration, properties)
+    WriteToTimeEvents(configuration, properties)
   }
 }

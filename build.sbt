@@ -25,7 +25,6 @@ lazy val lateEvents = project
   .settings(assemblySettings)
   .settings(
     libraryDependencies ++= library.configLibs,
-    libraryDependencies ++= library.kafkaLibs,
     libraryDependencies ++= library.logLibs,
     libraryDependencies ++= library.sparkLibs,
     libraryDependencies ++= library.testLibs
@@ -38,6 +37,23 @@ lazy val topicReader = project
   )
   .settings(commonSettings)
   .settings(protobufSettings)
+  .settings(assemblySettings)
+  .settings(
+    libraryDependencies ++= library.configLibs,
+    libraryDependencies ++= library.kafkaLibs,
+    libraryDependencies ++= library.logLibs,
+    libraryDependencies ++= library.testLibs
+  )
+  .dependsOn(protobufs)
+
+lazy val generator = project
+  .in(file("generator"))
+  .settings(
+    name := "generator"
+  )
+  .settings(commonSettings)
+  .settings(protobufSettings)
+  .settings(assemblySettings)
   .settings(
     libraryDependencies ++= library.configLibs,
     libraryDependencies ++= library.kafkaLibs,

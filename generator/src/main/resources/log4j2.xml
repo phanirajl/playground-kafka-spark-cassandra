@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <Appenders>
+    <Console name="Stdout" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d %p %c{1.} [%t] %m%n"/>
+    </Console>
+  </Appenders>
+
+  <Loggers>
+    <Logger name="org.playground" level="DEBUG">
+      <AppenderRef ref="Stdout"/>
+    </Logger>
+    <Root level="info" includeLocation="true">
+      <AppenderRef ref="Stdout"/>
+    </Root>
+  </Loggers>
+</Configuration>

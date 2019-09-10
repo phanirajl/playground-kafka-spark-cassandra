@@ -1,6 +1,6 @@
-package org.playground.late.events.generator
+package org.playground.generator
 
-import org.playground.late.events.protobuf.TimeEvent.TimeEvent
+import org.playground.protobufs.TimeEvent.TimeEvent
 
 class TimeEventGenerator(var currentSequenceNumber: Int = 0, val id: Long) {
   def timeEvent(timestamp: Long): TimeEvent = {
@@ -8,7 +8,8 @@ class TimeEventGenerator(var currentSequenceNumber: Int = 0, val id: Long) {
     TimeEvent(
       id             = id,
       timestamp      = timestamp,
-      name           = s"TimeEvent-$currentSequenceNumber",
+      name           = s"TimeEvent",
+      description    = s"event number: $currentSequenceNumber",
       sequenceNumber = currentSequenceNumber
     )
   }

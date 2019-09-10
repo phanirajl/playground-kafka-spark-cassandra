@@ -9,6 +9,7 @@ This is a playground project for the frameworks:
 * docker-compose installed
 
 # Start Up Environment
+0. `docker-compose rm -svf`
 1. `docker-compose up`
 2. start `ApplicationKafkaReader` in IntelliJ
 3. start `ApplicationKafkaWriter` in IntelliJ

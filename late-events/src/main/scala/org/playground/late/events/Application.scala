@@ -4,7 +4,7 @@ import org.playground.late.events.process.Configuration
 import org.playground.late.events.process.streaming.CreateStream
 import org.slf4j.LoggerFactory
 
-object ApplicationStreaming {
+object Application {
   private val Log = LoggerFactory.getLogger(this.getClass)
 
   def main(args: Array[String]): Unit = {
