@@ -2,6 +2,19 @@ name := "playground-kafka-spark-cassandra"
 
 import sbt.Keys._
 
+lazy val protobufs = project
+  .in(file("protobufs"))
+  .settings(
+    name := "protobufs"
+  )
+  .settings(
+    libraryDependencies ++= Seq(
+      library.scalapbRuntime
+    )
+  )
+  .settings(commonSettings)
+  .settings(protobufSettings)
+
 lazy val lateEvents = project
   .in(file("late-events"))
   .settings(
@@ -17,6 +30,21 @@ lazy val lateEvents = project
     libraryDependencies ++= library.sparkLibs,
     libraryDependencies ++= library.testLibs
   )
+
+lazy val topicReader = project
+  .in(file("topic-reader"))
+  .settings(
+    name := "topic-reader"
+  )
+  .settings(commonSettings)
+  .settings(protobufSettings)
+  .settings(
+    libraryDependencies ++= library.configLibs,
+    libraryDependencies ++= library.kafkaLibs,
+    libraryDependencies ++= library.logLibs,
+    libraryDependencies ++= library.testLibs
+  )
+  .dependsOn(protobufs)
 
 lazy val library = new {
   object Version {
@@ -35,6 +63,7 @@ lazy val library = new {
   val kafka            = "org.apache.kafka"         %% "kafka"                      % Kafka
   val log4j            = "org.apache.logging.log4j" % "log4j-api"                   % Log4j
   val pureConfig       = "com.github.pureconfig"    %% "pureconfig"                 % PureConfig
+  val scalapbRuntime   = "com.thesamet.scalapb"     %% "scalapb-runtime"            % scalapb.compiler.Version.scalapbVersion % "protobuf"
   val scalaTest        = "org.scalatest"            %% "scalatest"                  % ScalaTest % "test"
   val slf4jBridge      = "org.apache.logging.log4j" % "log4j-slf4j-impl"            % Log4j
   val sparkCore        = "org.apache.spark"         % "spark-core_2.11"             % Spark
@@ -95,7 +124,9 @@ lazy val commonSettings = Seq(
     "UTF-8",
     "-feature",
     "-Xfatal-warnings"
-  )
+  ),
+  unmanagedSourceDirectories.in(Compile) := Seq(scalaSource.in(Compile).value),
+  unmanagedSourceDirectories.in(Test) := Seq(scalaSource.in(Test).value)
 )
 
 // -----------------------------------------------------------------------------
@@ -106,7 +137,9 @@ lazy val protobufSettings =
   Seq(
     PB.targets in Compile := Seq(
       scalapb.gen() -> (sourceManaged in Compile).value
-    )
+    ),
+    // add src/main/protobuf directory to be included in artifact jar
+    unmanagedResourceDirectories in Compile ++= (PB.protoSources in Compile).value
   )
 
 // -----------------------------------------------------------------------------
