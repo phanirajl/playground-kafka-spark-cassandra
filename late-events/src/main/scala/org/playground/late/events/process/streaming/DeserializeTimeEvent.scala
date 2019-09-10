@@ -4,7 +4,7 @@ import java.sql.Timestamp
 
 import scala.util.{ Failure, Success }
 
-import org.playground.late.events.protobuf.TimeEvent.{ TimeEvent => ProtoTimeEvent }
+import org.playground.protobufs.TimeEvent.{ TimeEvent => ProtoTimeEvent }
 import org.slf4j.LoggerFactory
 
 private[streaming] final case class TimeEvent(id: Long,

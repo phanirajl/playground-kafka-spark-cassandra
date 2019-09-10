@@ -29,6 +29,7 @@ lazy val lateEvents = project
     libraryDependencies ++= library.sparkLibs,
     libraryDependencies ++= library.testLibs
   )
+  .dependsOn(protobufs)
 
 lazy val topicReader = project
   .in(file("topic-reader"))
