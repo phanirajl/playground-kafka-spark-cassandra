@@ -6,5 +6,6 @@ message TimeEvent {
   int64 id = 1;
   int64 timestamp = 2;
   string name = 3;
-  int32 sequenceNumber = 4;
+  string description = 4;
+  int32 sequenceNumber = 5;
 }

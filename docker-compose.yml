@@ -20,30 +20,30 @@ services:
       - "KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT"
       - "KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1"
 
-  spark-master:
-    image: dsncode/spark-master
-    hostname: master
-    ports:
-      - "8080:8080"
-      - "7077:7077"
-    networks:
-      - sparknet
-
-  spark-slave:
-    image: dsncode/spark-slave
-    depends_on:
-      - spark-master
-    ports:
-      - "8081:8081"
-    environment:
-      - "SPARK_MASTER=spark-master:7077"
-    deploy:
-      replicas: 1 # change to any number of necessary replicas
-    networks:
-      - sparknet
-
-  cassandra:
-    image: spotify/cassandra
-
-networks:
-  sparknet:
+#  spark-master:
+#    image: dsncode/spark-master
+#    hostname: master
+#    ports:
+#      - "8080:8080"
+#      - "7077:7077"
+#    networks:
+#      - sparknet
+#
+#  spark-slave:
+#    image: dsncode/spark-slave
+#    depends_on:
+#      - spark-master
+#    ports:
+#      - "8081:8081"
+#    environment:
+#      - "SPARK_MASTER=spark-master:7077"
+#    deploy:
+#      replicas: 1 # change to any number of necessary replicas
+#    networks:
+#      - sparknet
+#
+#  cassandra:
+#    image: spotify/cassandra
+#
+#networks:
+#  sparknet:

@@ -1,5 +1,7 @@
 name := "playground-kafka-spark-cassandra"
 
+import sbt.Keys._
+
 lazy val lateEvents = project
   .in(file("late-events"))
   .settings(
@@ -7,6 +9,7 @@ lazy val lateEvents = project
   )
   .settings(commonSettings)
   .settings(protobufSettings)
+  .settings(assemblySettings)
   .settings(
     libraryDependencies ++= library.configLibs,
     libraryDependencies ++= library.kafkaLibs,
@@ -28,16 +31,17 @@ lazy val library = new {
   }
 
   import Version._
-  val disruptor      = "com.lmax"                 % "disruptor"            % Disruptor
-  val kafka          = "org.apache.kafka"         %% "kafka"               % Kafka
-  val log4j          = "org.apache.logging.log4j" % "log4j-api"            % Log4j
-  val pureConfig     = "com.github.pureconfig"    %% "pureconfig"          % PureConfig
-  val scalaTest      = "org.scalatest"            %% "scalatest"           % ScalaTest % "test"
-  val slf4jBridge    = "org.apache.logging.log4j" % "log4j-slf4j-impl"     % Log4j
-  val sparkCore      = "org.apache.spark"         % "spark-core_2.11"      % Spark
-  val sparkSql       = "org.apache.spark"         % "spark-sql_2.11"       % Spark
-  val sparkStreaming = "org.apache.spark"         % "spark-streaming_2.11" % Spark
-  val typesafeConfig = "com.typesafe"             % "config"               % TypesafeConfig
+  val disruptor        = "com.lmax"                 % "disruptor"                   % Disruptor
+  val kafka            = "org.apache.kafka"         %% "kafka"                      % Kafka
+  val log4j            = "org.apache.logging.log4j" % "log4j-api"                   % Log4j
+  val pureConfig       = "com.github.pureconfig"    %% "pureconfig"                 % PureConfig
+  val scalaTest        = "org.scalatest"            %% "scalatest"                  % ScalaTest % "test"
+  val slf4jBridge      = "org.apache.logging.log4j" % "log4j-slf4j-impl"            % Log4j
+  val sparkCore        = "org.apache.spark"         % "spark-core_2.11"             % Spark
+  val sparkSql         = "org.apache.spark"         % "spark-sql_2.11"              % Spark
+  val sparkStreaming   = "org.apache.spark"         % "spark-streaming_2.11"        % Spark
+  val sparkKafkaBridge = "org.apache.spark"         %% "spark-streaming-kafka-0-10" % Spark
+  val typesafeConfig   = "com.typesafe"             % "config"                      % TypesafeConfig
 
   val configLibs = Seq(
     pureConfig,
@@ -57,7 +61,8 @@ lazy val library = new {
   val sparkLibs = Seq(
     sparkCore,
     sparkSql,
-    sparkStreaming
+    sparkStreaming,
+    sparkKafkaBridge
   )
 
   val testLibs = Seq(
@@ -103,3 +108,21 @@ lazy val protobufSettings =
       scalapb.gen() -> (sourceManaged in Compile).value
     )
   )
+
+// -----------------------------------------------------------------------------
+// sbt assembly plugin settings
+// -----------------------------------------------------------------------------
+
+lazy val assemblySettings = {
+  assemblyShadeRules in (IntegrationTest, assembly) ++= Seq(
+    // https://scalapb.github.io/sparksql.html
+    ShadeRule.rename("com.google.protobuf.**" -> "shadeproto.@1").inAll
+  )
+
+  // https://stackoverflow.com/questions/41303037/why-does-spark-application-fail-with-classnotfoundexception-failed-to-find-dat
+  assemblyMergeStrategy in assembly := {
+    case "META-INF/services/org.apache.spark.sql.sources.DataSourceRegister" => MergeStrategy.concat
+    case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+    case x => MergeStrategy.first
+  }
+}
