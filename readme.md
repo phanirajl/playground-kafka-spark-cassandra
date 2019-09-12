@@ -32,14 +32,7 @@ This is a playground project for the frameworks:
 ## Startup - LateEvents Application
 1. `docker ps`
 2. Go into spark-master container: `docker exec -it <container-id> bash`
-3. Update apt: `apt update`
-4. install java-8: `apt install openjdk-8-jdk`
-5. switch java: `update-alternatives --config java` (choose java 8)
-6. define env variable
-    * `export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64`
-    * `export JAVA_VERSION=1.8.0`
-7. `cd spark-2.4.0-bin-hadoop2.7/`
-8. `./bin/spark-submit   --class org.playground.late.events.Application --master spark://spark-master:7077 --packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.4.0 late-events/late-events-assembly-0.0.1-SNAPSHOT.jar`
+8. `./bin/spark-submit   --class org.playground.late.events.Application --master spark://spark-master:7077 --executor-memory 1G --total-executor-cores 2 --packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.4.0 late-events/late-events-assembly-0.0.1-SNAPSHOT.jar`
 
 # Shut Down
 `docker-compose stop`
