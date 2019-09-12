@@ -10,6 +10,11 @@ class ConfigurationTest extends WordSpec with Matchers {
 
       subject.kafka.bootstrapServers shouldBe "http://testserver/kafka:1234"
       subject.kafka.timeEventTopic shouldBe "test-time-event-topic"
+      subject.spark.master shouldBe "spark://localhost:7077"
+      subject.spark.compressionCodec shouldBe "snappy"
+      subject.spark.applicationName shouldBe "Playground Application"
+      subject.spark.timeEventWatermark shouldBe "20 seconds"
+      subject.spark.timeEventWindowDuration shouldBe "40 seconds"
     }
   }
 }
