@@ -17,8 +17,7 @@ object CreateSparkSession {
     )
     SparkSession.builder
       .config("spark.io.compression.codec", compressionCodec)
-      // .master(master)
-      .master("local[2]")
+      .master(master)
       .appName(applicationName)
       .getOrCreate()
   }

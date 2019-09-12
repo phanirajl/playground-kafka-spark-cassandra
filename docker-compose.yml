@@ -5,6 +5,8 @@ services:
     environment:
       - "ZOOKEEPER_CLIENT_PORT=2181"
       - "ZOOKEEPER_TICK_TIME=2000"
+    networks:
+      - sparknet
 
   kafka:
     image: confluentinc/cp-kafka:latest
@@ -19,31 +21,40 @@ services:
       - "KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
       - "KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT"
       - "KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1"
+    networks:
+      - sparknet
 
-#  spark-master:
-#    image: dsncode/spark-master
-#    hostname: master
-#    ports:
-#      - "8080:8080"
-#      - "7077:7077"
-#    networks:
-#      - sparknet
-#
-#  spark-slave:
-#    image: dsncode/spark-slave
-#    depends_on:
-#      - spark-master
-#    ports:
-#      - "8081:8081"
-#    environment:
-#      - "SPARK_MASTER=spark-master:7077"
-#    deploy:
-#      replicas: 1 # change to any number of necessary replicas
-#    networks:
-#      - sparknet
-#
-#  cassandra:
-#    image: spotify/cassandra
-#
-#networks:
-#  sparknet:
+  spark-master:
+    image: dsncode/spark-master
+    hostname: master
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+    networks:
+      - sparknet
+    volumes:
+      - ./late-events/script:/app/spark-2.4.0-bin-hadoop2.7/late-events
+    environment:
+      - "KAFKA_BOOTSTRAP_SERVERS=kafka:9092"
+
+
+  spark-slave:
+    image: dsncode/spark-slave
+    depends_on:
+      - spark-master
+    ports:
+      - "8081:8081"
+    environment:
+      - "SPARK_MASTER=spark-master:7077"
+    deploy:
+      replicas: 1 # change to any number of necessary replicas
+    networks:
+      - sparknet
+    volumes:
+      - ./late-events/script:/app/spark-2.4.0-bin-hadoop2.7/late-events
+
+  cassandra:
+    image: spotify/cassandra
+
+networks:
+  sparknet:

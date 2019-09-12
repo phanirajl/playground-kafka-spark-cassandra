@@ -71,7 +71,7 @@ lazy val library = new {
     val PureConfig     = "0.11.1"
     val Scala          = "2.11.12"
     val ScalaTest      = "3.0.1"
-    val Spark          = "2.4.4"
+    val Spark          = "2.4.0"
     val TypesafeConfig = "1.3.5-RC1"
   }
 
@@ -83,9 +83,9 @@ lazy val library = new {
   val scalapbRuntime   = "com.thesamet.scalapb"     %% "scalapb-runtime"            % scalapb.compiler.Version.scalapbVersion % "protobuf"
   val scalaTest        = "org.scalatest"            %% "scalatest"                  % ScalaTest % "test"
   val slf4jBridge      = "org.apache.logging.log4j" % "log4j-slf4j-impl"            % Log4j
-  val sparkCore        = "org.apache.spark"         % "spark-core_2.11"             % Spark
-  val sparkSql         = "org.apache.spark"         % "spark-sql_2.11"              % Spark
-  val sparkStreaming   = "org.apache.spark"         % "spark-streaming_2.11"        % Spark
+  val sparkCore        = "org.apache.spark"         % "spark-core_2.11"             % Spark % "provided"
+  val sparkSql         = "org.apache.spark"         % "spark-sql_2.11"              % Spark % "provided"
+  val sparkStreaming   = "org.apache.spark"         % "spark-streaming_2.11"        % Spark % "provided"
   val sparkKafkaBridge = "org.apache.spark"         %% "spark-streaming-kafka-0-10" % Spark
   val typesafeConfig   = "com.typesafe"             % "config"                      % TypesafeConfig
 
@@ -108,7 +108,7 @@ lazy val library = new {
     sparkCore,
     sparkSql,
     sparkStreaming,
-    sparkKafkaBridge
+    sparkKafkaBridge,
   )
 
   val testLibs = Seq(
