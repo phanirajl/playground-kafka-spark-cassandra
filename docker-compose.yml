@@ -35,7 +35,7 @@ services:
     volumes:
       - ./late-events/script:/app/spark-2.4.0-bin-hadoop2.7/late-events
     environment:
-      - "KAFKA_BOOTSTRAP_SERVERS=kafka:9092"
+      - "KAFKA_BOOTSTRAP_SERVERS=kafka:29092"
 
 
   spark-slave:
